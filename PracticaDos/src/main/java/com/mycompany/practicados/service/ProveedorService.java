@@ -49,15 +49,19 @@ public class ProveedorService {
         return eliminadosList.stream().filter(proveedor -> proveedor.isEliminado()).collect(Collectors.toList());
     }
 
+    //estaría bien solo mandar el código o el id del registro
     public boolean eliminarProveedor(Proveedor proveedor) {
-        for (int i = 0; i < proveedorList.size(); i++) {
-            if (proveedorList.get(i).getCodigo().equals(proveedor.getCodigo())) {
-                proveedorList.remove(proveedor);
-                eliminadosList.add(proveedor);
-                return true;
-            }
-        }
-        return false;
+        
+        String codigo = proveedor.getCodigo();
+        
+        
+        proveedorList.stream()
+                .filter(pr -> pr.getCodigo().equalsIgnoreCase(codigo))
+                .findFirst()
+                .ifPresent(pr -> pr.setEliminado(true));
+        
+        
+        return true;
     }
 
     public Proveedor buscarProveedor(String codigo) {
