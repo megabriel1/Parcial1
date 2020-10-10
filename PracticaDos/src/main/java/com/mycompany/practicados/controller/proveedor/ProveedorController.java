@@ -1,4 +1,3 @@
-
 package com.mycompany.practicados.controller.proveedor;
 
 import com.mycompany.practicados.model.Proveedor;
@@ -19,8 +18,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class ProveedorController {
 
     @Resource
-private ProveedorService proveedorService;
-    
+    private ProveedorService proveedorService;
+
     @GetMapping("/proveedor")
     public String get(Model model) {
 
@@ -83,23 +82,16 @@ private ProveedorService proveedorService;
     }
 
     @PostMapping("/proveedor/eliminar")
-    public String eliminar(Model model, @ModelAttribute("proveedor") Proveedor proveedor, BindingResult bindingResult) {
+    public String eliminar(Model model, @ModelAttribute("proveedor") Proveedor proveedor) {
 
-        if (!bindingResult.hasErrors()) {
+        proveedorService.eliminarProveedor(proveedor);
 
-            boolean eliminado = proveedorService.eliminarProveedor(proveedor);
+        model.addAttribute("proveedor", proveedor);
+        model.addAttribute("mensaje", "El cliente ha sido inhabilitado");
 
-            if (eliminado) {
-
-                model.addAttribute("proveedor", new Proveedor());
-                model.addAttribute("mensaje", "El cliente ha sido inhabilitado");
-            } else {
-                model.addAttribute("mensaje", "El cliente ya existe");
-            }
-        }
         return "proveedor/eliminar-proveedor";
     }
-    
+
     @GetMapping("/proveedor/eliminado/{eliminado}")
     public String getEliminado(Model model, @PathVariable("eliminado") String eliminado) {
 
@@ -109,7 +101,7 @@ private ProveedorService proveedorService;
 
         return "proveedor/eliminado";
     }
-  
+
     @PostMapping("/proveedor/eliminado")
     public String eliminado(Model model, @Valid @ModelAttribute("proveedor") Proveedor proveedor, BindingResult bindingResult) {
         if (!bindingResult.hasErrors()) {
@@ -123,4 +115,4 @@ private ProveedorService proveedorService;
         }
         return "proveedor/eliminado";
     }
-   }
+}
